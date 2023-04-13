@@ -1,0 +1,7 @@
+- **go**
+- **k8s**
+    - [ubuntu安装k8s](./node/k8s/ubuntu%E5%AE%89%E8%A3%85k8s.md "欢迎入坑k8s")
+- **mysql**
+- **rust**
+- **vscode**
+    - [配置vscode获取命令行参数](./node/vscode/%E9%85%8D%E7%BD%AEvscode%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.md) 

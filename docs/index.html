@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="icon" href="./node/attachment/table.ico" type="image/x-icon">
+</head>
+
+<body>
+  <div id="app">加载ing</div>
+  <script>
+    window.$docsify = {
+      name: '7DBlog',                             // 侧边栏博客标题
+      logo: '/node/attachment/icon.jpg',          // 开启后，name替换为图片
+      repo: 'https://github.com/7DGithubWeb',// github项目的地址
+      loadSidebar: true,                          // 开启侧边栏，加载`_sidebar.md`文件
+      subMaxLevel: 2,                             // 开启侧边栏同时显示目录功能,如果md文件的第一个标题是一级标题，那么默认已经忽略了。
+      loadNavbar: true,                           // 导航栏，加载`_navbar.md`文件
+      coverpage: true,                            // 封面，加载`_coverpage.md`文件
+      onlyCover: false,                           // 设置了封面后，开启网站只进入封面（默认false,封面和首页是一页，可以向下滑动）
+      mergeNavbar: true,                          // 小屏设备下合并导航栏到侧边栏
+      search: {                                   // 搜索插件
+        placeholder: '搜索试试',
+        noData: '没有结果！',
+        hideOtherSidebarContent: true,
+      },
+      pagination: {                               // 上一篇/下一篇
+        previousText: "上一篇",
+        nextText: "下一篇",
+        crossChapter: true,
+        crossChapterText: true,
+      },
+
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <!-- 搜索插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <!-- 白天/夜晚模式切换 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/style.min.css">
+  <script src="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"></script>
+  <!-- 上一篇/下一篇 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <!-- 图片放大插件 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <!-- 代码一键复制到剪切板 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2.1.1/dist/docsify-copy-code.min.js"></script>
+  <!-- 侧边栏折叠 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  <!-- 语法高亮 -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-go.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-bash.min.js"></script>
+
+</html>
