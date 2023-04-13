@@ -1,6 +1,5 @@
 # 可以，写博客的那个劲儿又回来了
 
-[在线阅读地址](https://7dgithubweb.github.io/7DBlog/)
 
 > 一起学习吧！
 
