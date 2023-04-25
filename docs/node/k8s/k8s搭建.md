@@ -470,8 +470,6 @@ Then you can join any number of worker nodes by running the following on each as
 kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
     --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 
 
-# 对于root用户添加，在/etc/profile 加入下面一行
-export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # 验证主节点成功
 kubectl get pods -n kube-system
