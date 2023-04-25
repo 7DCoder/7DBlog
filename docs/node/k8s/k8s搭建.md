@@ -475,7 +475,7 @@ kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
 kubectl get pods -n kube-system
 # 健康检查（不要怀疑，就是healthz）
 curl -k https://localhost:6443/healthz
-
+curl -k https://虚拟ip地址:6443/healthz → https://10.100.2.207:6443/healthz
 ```
 
 
