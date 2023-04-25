@@ -582,6 +582,7 @@ default via 10.100.0.1 dev ens3 proto static
 ```
 
 # 其他
+
 ## 删除node重新加入集群
 
 **参考** 
@@ -633,7 +634,7 @@ kubectl apply -f calico.yaml
 ```
 
 
-# 删除master节点
+## 删除master节点
 ```sh
 # master200节点删除 master201  节点
 kubectl drain master201 --delete-local-data --force --ignore-daemonsets
