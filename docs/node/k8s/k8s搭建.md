@@ -633,6 +633,14 @@ kubectl apply -f calico.yaml
 ```
 
 
+# 删除master节点
+```sh
+# master200节点删除 master201  节点
+kubectl drain master201 --delete-local-data --force --ignore-daemonsets
+kubectl delete node master201
+```
+
+
 # 参考博客
 * [1.1 基于ubuntu 部署最新版 k8s 集群 — 图解K8S documentation (iswbm.com)](https://k8s.iswbm.com/c01/p01_depoly-kubernetes-cluster-with-kubelet.html#id1)
 * [K8S的安装(Ubuntu 20.04) - 简书 (jianshu.com)](https://www.jianshu.com/p/520d6414a4ab) 
