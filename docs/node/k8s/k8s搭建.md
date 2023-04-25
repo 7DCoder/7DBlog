@@ -1,5 +1,5 @@
 
-# ubuntu安装k8s
+# ubuntu搭建高可用k8s集群多master
 
 
 
@@ -14,12 +14,10 @@
 
 
 
-**参考博客** 
-* [1.1 基于ubuntu 部署最新版 k8s 集群 — 图解K8S documentation (iswbm.com)](https://k8s.iswbm.com/c01/p01_depoly-kubernetes-cluster-with-kubelet.html#id1)
-* [K8S的安装(Ubuntu 20.04) - 简书 (jianshu.com)](https://www.jianshu.com/p/520d6414a4ab) 
-* [Kubernetes第二篇：从零开始搭建k8s集群（亲测可用）51CTO博客_如何搭建k8s集群](https://blog.51cto.com/u_15287666/5269619)  
 
-## 0. k8s配置文件总结
+
+
+# k8s配置文件总结
 ```sh
 # ################################################################################################
 # k8s配置文件总结
@@ -30,7 +28,10 @@
 /lib/systemd/system/kubelet.service
 ```
 
-## 1. 设置代理
+
+# 环境准备
+
+## 设置代理
 
 把下述内容写入 `/etc/profile` 文件中。
 ```shell
@@ -59,7 +60,7 @@ https_proxy=http://10.100.0.10:808
 http_proxy=http://10.100.0.10:808
 ```
 
-## 2. 配置软件仓库
+## 配置软件仓库
 **参考连接** 
 * [ubuntu镜像_ubuntu下载地址_ubuntu安装教程-阿里巴巴开源镜像站 (aliyun.com)](https://developer.aliyun.com/mirror/ubuntu) 
 * [ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors-i.tuna.tsinghua.edu.cn/help/ubuntu/) 
@@ -86,7 +87,7 @@ deb-src https://mirrors.aliyun.com/ubuntu/ focal-backports main restricted unive
 ```
 
 
-## 3. 系统配置
+## 系统配置
 
 **参考** 
 * [kubeadm集群化部署多master节点（生产环境适用）kubeadm部署多master_andboby的博客-CSDN博客](https://blog.csdn.net/wangqiubo2010/article/details/114582436)
@@ -161,13 +162,15 @@ master200
 ```
 
 
-## 4.  apt更新安装基础apt包
+## apt更新安装基础apt包
 ```sh
 apt-get update
 apt-get install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
 ```
 
-## 5. docker安装
+# docker环境
+
+## docker安装
 ```sh
 # ###########################################################################################
 # 1. 首先，更新软件包索引，并且安装必要的依赖软件，来添加一个新的 HTTPS 软件源
@@ -231,11 +234,141 @@ apt-mark hold docker-ce
 
 ```
 
-## 6. k8s安装
+
+## docker安装haproxy
+
+**参考**
+* [k8s高可用部署：keepalived + haproxy_Kubernetes中文社区](https://www.kubernetes.org.cn/6964.html) 
+* [docker中haproxy的安装以及负载均衡配置 - 腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1876608) 
+* [keepalived in docker - 腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1472255) 
+
+**拉取镜像** 
+```sh
+docker pull haproxy
+```
+
+**配置目录** 
+```sh
+mkdir -p /docker/haproxy-master/ 
+vim /docker/haproxy-master/haproxy.cfg
+```
+
+**配置haproxy.cfg文件**
+```
+defaults
+    mode            tcp
+    log             global
+    option          tcplog
+    option          dontlognull
+    option http-server-close
+    option          redispatch
+    retries         3
+    timeout http-request 10s
+    timeout queue   1m
+    timeout connect 10s
+    timeout client  1m
+    timeout server  1m
+    timeout http-keep-alive 10s
+    timeout check   10s
+    maxconn         3000
+frontend    k8s
+    bind        0.0.0.0:13307
+    mode        tcp
+    log         global
+    default_backend k8s_apiserver
+
+backend     k8s_apiserver
+    balance roundrobin
+    server master200 10.100.2.200:6443 check inter 5s rise 2 fall 3
+    server master201 10.100.2.201:6443 check inter 5s rise 2 fall 3
+    server master202 10.100.2.202:6443 check inter 5s rise 2 fall 3
+
+listen stats
+    mode    http
+    bind    0.0.0.0:1080
+    stats   enable
+    stats   hide-version
+    stats uri /haproxyamdin?stats
+    stats realm Haproxy\ Statistics
+    stats auth admin:admin
+    stats admin if TRUE
+```
+
+**构建容器**
+```sh
+docker run --restart always -p 1080:1080 -p 13307:13307 -d --name haproxy-master -v /docker/haproxy-master/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg --privileged=true haproxy
+```
+
+
+
+## docker安装keepalievd
+**参考**
+* [k8s高可用部署：keepalived + haproxy_Kubernetes中文社区](https://www.kubernetes.org.cn/6964.html)
+**拉取镜像**
+```sh
+docker pull osixia/keepalived
+```
+**创建文件**
+```sh
+mkdir -p  /docker/keepalived/
+vim  /docker/keepalived/keepalived.conf
+```
+
+**配置文件**
+```sh
+global_defs {
+   router_id node203 # keepalived 主机唯一标识，建议使用当前主机名
+}
+
+vrrp_instance VI_1 {
+    state BACKUP # 当前节点在此虚拟路由器上的初始状态，状态为MASTER或者BACKUP
+    interface ens3 # 绑定当前虚拟路由器使用的物理接口，可以不和VIP在同一个网卡
+    virtual_router_id 51 # 每个虚拟路由器惟一标识，范围：0-255，同属一个虚拟路由器的多个 keepalived 节点此值必须相同
+    priority 50 # 当前物理节点在此虚拟路由器的优先级，范围：1-254
+    nopreempt # 非抢占式
+    advert_int 1 # vrrp通告的时间间隔，默认1s
+    authentication { # 认证机制
+        auth_type PASS  # 认证类型，可以是AH或PASS，AH为IPSEC认证(不推荐),PASS为简单密码(建议使用)
+        auth_pass 1111  # 预共享密钥，即相互认证密码
+    }
+    virtual_ipaddress { # 虚拟路由IP
+                10.100.2.207 # 指定VIP的MASK和网卡，注意：不指定/prefix,默认为32
+    }
+    # 使用单播配置，按需求和上面的组播二选一即可
+    unicast_src_ip 10.100.2.203        # 本机IP
+    unicast_peer{
+        10.100.2.204                    # 指向其他Keepalived主机IP
+        10.100.2.205
+    }
+    track_script {
+      chk_haproxy
+    }
+}
+
+vrrp_script chk_haproxy {
+        script "/bin/bash -c 'if [[ $(netstat -nlp | grep 13307) ]]; then exit 0; else exit 1; fi'"
+        interval  1
+        weight 3
+}
+```
+**运行镜像**
+```sh
+docker run --restart always --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /docker/keepalived/keepalived.conf:/container/service/keepalived/assets/keepalived.conf -d osixia/keepalived --copy-service
+```
+**查看日志**
+```sh
+docker logs 容器id
+```
+
+
+
+# k8s安装
+
+**参考** 
 * [安装最新版Calico-CSDN博客](https://blog.csdn.net/wvxvsuizhong/article/details/124068957)
 * [Calico官网所有版本](https://docs.tigera.io/archive) 
 
-**主节点、从节点都执行**
+## 主节点、从节点都执行
 ```sh
 
 ###########################################################################################
@@ -280,11 +413,16 @@ kubeadm config images pull --image-repository=registry.aliyuncs.com/google_conta
 
 ```
 
-**主节点(master)初始化**
+## 主节点(master)初始化
 ```sh
 
-# （主节点执行）k8s主节点执行初始化
+# （主节点执行）单节点k8s主节点执行初始化
 kubeadm init --pod-network-cidr=10.100.2.0/24 --apiserver-advertise-address=10.100.2.200 --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v1.18.4 --ignore-preflight-errors=Swap
+
+
+# （主节点执行）多节点k8s主节点执行初始化（注意，要在keepalived的主节点初始化）
+kubeadm init --pod-network-cidr=10.100.2.0/24  --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v1.18.4 --ignore-preflight-errors=Swap --control-plane-endpoint=10.100.2.207:6443 --upload-certs
+
 
 
 # #########################################################################################
@@ -317,10 +455,20 @@ You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
+You can now join any number of the control-plane node running the following command on each as root:
+
+  kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
+    --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 \
+    --control-plane --certificate-key b0f336b64d7a7e05093e797bb014156597b298d8770a1af83c8538fafa2145f5
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 10.100.2.201:6443 --token txi20a.77rm6gz5gb2r5wpk \
-    --discovery-token-ca-cert-hash sha256:2544cc7e4be705bd67f3d0521c1125ab4995bc7304b80366c0619177d585eaeb
+kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
+    --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 
 
 # 对于root用户添加，在/etc/profile 加入下面一行
 export KUBECONFIG=/etc/kubernetes/admin.conf
@@ -333,7 +481,7 @@ curl -k https://localhost:6443/healthz
 ```
 
 
-**从节点执行**
+## node节点执行
 ```sh
 # #########################################################################################
 # 从节点执行
@@ -363,7 +511,7 @@ kubectl get nodes
 
 
 
-**主节点(master)安装calico网络插件** 
+## 主节点(master)安装calico网络插件
 参考博客：
 * [calico网络安装和删除_k8s删除calico_开发运维玄德公的博客-CSDN博客](https://blog.csdn.net/xingzuo_1840/article/details/119580448)
 ```sh
@@ -383,7 +531,7 @@ vim calico.yaml
               value: "10.100.2.0/24"
 ```
 
-创建calico网络
+## 创建calico网络
 ```sh
 kubectl create -f calico.yaml
 ```
@@ -405,7 +553,7 @@ kube-system   kube-proxy-8t874                           1/1     Running   0    
 kube-system   kube-proxy-gzv8z                           1/1     Running   0          2d17h
 kube-system   kube-scheduler-master200   
 ```
-查看node
+## 查看node
 ```sh
 root@master200:~# kubectl get node
 NAME        STATUS   ROLES    AGE     VERSION
@@ -414,7 +562,7 @@ node204     Ready    <none>   2d17h   v1.18.4
 node205     Ready    <none>   2d17h   v1.18.4
 ```
 
-查看路由
+## 查看路由
 ```sh
 root@master200:~# ip route
 default via 10.100.0.1 dev ens3 proto static 
@@ -425,46 +573,20 @@ default via 10.100.0.1 dev ens3 proto static
 ```
 
 
-**增加一个master节点** 
-[如何向Kubernetes集群中添加master节点（原集群只有一个master节点） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/460794489) 
-首次添加节点需要执行
+## 增加一个master节点 
+
 ```sh
-# 在初始化的节点中查看文件kubeadm-config.yaml
-kubectl -n kube-system get cm kubeadm-config -oyaml
-# 查看是否有`controlPlaneEndpoint`,如果没有，则执行下一行命令
-kubectl -n kube-system edit cm kubeadm-config
-# 添加 controlPlaneEndpoint: 10.100.2.200:6443（主节点ip地址）
-kind: ClusterConfiguration  
-kubernetesVersion: v1.18.4
-controlPlaneEndpoint: 172.16.64.2:6443 # 在此处添加
-
-
-# （master节点）执行命令 kubeadm init phase upload-certs --upload-certs
-root@envops:~# kubeadm init phase upload-certs --upload-certs
-I0407 17:14:25.402390   29313 version.go:252] remote version is much newer: v1.26.3; falling back to: stable-1.18
-W0407 17:14:26.134663   29313 configset.go:202] WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
-[upload-certs] Storing the certificates in Secret "kubeadm-certs" in the "kube-system" Namespace
-[upload-certs] Using certificate key:
-6d22c82254ce677dacf0cea76d304cad420ba20dc0d0924dbccf518cbec09050
-
-# 保存certificate key:： 6d22c82254ce677dacf0cea76d304cad420ba20dc0d0924dbccf518cbec09050
-
-# （master节点）执行
-root@envops:~# kubeadm token create --print-join-command
-kubeadm join 10.100.2.200:6443 --token vyz985.9fgo1zwfpl47tsz3 --discovery-token-ca-cert-hash sha256:d3d729f64601e5f7889d6b86a2a37f2cb2acbbf5d802eaa3407fbda97792edde 
-
-# 将得到的token和certificate key进行拼接，得到如下命令：
-# > 注意事项：  
-#1.  不要使用 --experimental-control-plane，会报错
-#2.  要加上--control-plane --certificate-key ，不然就会添加为node节点而不是master
-#3.  join的时候节点上不要部署，如果部署了kubeadm reset后再join
-kubeadm join 10.100.2.200:6443 --token vyz985.9fgo1zwfpl47tsz3 --discovery-token-ca-cert-hash sha256:d3d729f64601e5f7889d6b86a2a37f2cb2acbbf5d802eaa3407fbda97792edde  --control-plane --certificate-key 6d22c82254ce677dacf0cea76d304cad420ba20dc0d0924dbccf518cbec09050
+  kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
+    --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 \
+    --control-plane --certificate-key b0f336b64d7a7e05093e797bb014156597b298d8770a1af83c8538fafa2145f5
 ```
 
+# 其他
+## 删除node重新加入集群
 
-## 99. 删除node在重新加入集群
+**参考** 
 * [k8s集群进行删除并添加node节点 - 腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1888163) 
-* [(4条消息) K8S集群增加新node - kubeadm 生成 token_kubeadm token gene_lswzw的博客-CSDN博客](https://blog.csdn.net/lswzw/article/details/90168428) 
+* [K8S集群增加新node - kubeadm 生成 token_kubeadm token gene_lswzw的博客-CSDN博客](https://blog.csdn.net/lswzw/article/details/90168428) 
 
 ```sh
 # master节点执行###########################################
@@ -509,3 +631,9 @@ kubectl delete -f calico.yaml
 kubectl apply -f calico.yaml
 
 ```
+
+
+# 参考博客
+* [1.1 基于ubuntu 部署最新版 k8s 集群 — 图解K8S documentation (iswbm.com)](https://k8s.iswbm.com/c01/p01_depoly-kubernetes-cluster-with-kubelet.html#id1)
+* [K8S的安装(Ubuntu 20.04) - 简书 (jianshu.com)](https://www.jianshu.com/p/520d6414a4ab) 
+* [Kubernetes第二篇：从零开始搭建k8s集群（亲测可用）51CTO博客_如何搭建k8s集群](https://blog.51cto.com/u_15287666/5269619)  

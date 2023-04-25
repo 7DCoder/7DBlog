@@ -6,7 +6,7 @@
     - [gin框架中查看pprof](./node/gin/gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E6%9F%A5%E7%9C%8Bpprof.md)
 - **go**
 - **k8s**
-    - [ubuntu安装k8s](./node/k8s/ubuntu%E5%AE%89%E8%A3%85k8s.md "欢迎入坑k8s")
+    - [ubuntu搭建高可用k8s集群多master](./node/k8s/k8s%E6%90%AD%E5%BB%BA.md "欢迎入坑k8s")
 - **mysql**
     - [docker安装mysql](./node/docker/docker%E5%AE%89%E8%A3%85mysql.md)
 - **rust**
