@@ -633,8 +633,8 @@ kubectl apply -f calico.yaml
 
 ```
 
-
 ## 删除master节点
+
 ```sh
 # master200节点删除 master201  节点
 kubectl drain master201 --delete-local-data --force --ignore-daemonsets
