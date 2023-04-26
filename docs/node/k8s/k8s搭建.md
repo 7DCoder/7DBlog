@@ -33,6 +33,8 @@
 
 ## 设置代理
 
+(注意：因为使用虚拟机上网需要代理，需要设置机器代理，可以不做)
+
 把下述内容写入 `/etc/profile` 文件中。
 ```shell
 vim /etc/profile
@@ -61,7 +63,9 @@ http_proxy=http://10.100.0.10:808
 ```
 
 ## 配置软件仓库
+
 **参考连接** 
+
 * [ubuntu镜像_ubuntu下载地址_ubuntu安装教程-阿里巴巴开源镜像站 (aliyun.com)](https://developer.aliyun.com/mirror/ubuntu) 
 * [ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror](https://mirrors-i.tuna.tsinghua.edu.cn/help/ubuntu/) 
 
@@ -317,7 +321,7 @@ vim  /docker/keepalived/keepalived.conf
 **配置文件**
 ```sh
 global_defs {
-   router_id node203 # keepalived 主机唯一标识，建议使用当前主机名
+   router_id master200 # keepalived 主机唯一标识，建议使用当前主机名
 }
 
 vrrp_instance VI_1 {
@@ -335,10 +339,10 @@ vrrp_instance VI_1 {
                 10.100.2.207 # 指定VIP的MASK和网卡，注意：不指定/prefix,默认为32
     }
     # 使用单播配置，按需求和上面的组播二选一即可
-    unicast_src_ip 10.100.2.203        # 本机IP
+    unicast_src_ip 10.100.2.200        # 本机IP
     unicast_peer{
-        10.100.2.204                    # 指向其他Keepalived主机IP
-        10.100.2.205
+        10.100.2.201                    # 指向其他Keepalived主机IP
+        10.100.2.202
     }
     track_script {
       chk_haproxy
@@ -499,8 +503,8 @@ kubeadm token create --print-join-command
 
 
 # 部署 node节点
-kubeadm join 10.100.2.201:6443 --token txi20a.77rm6gz5gb2r5wpk \
-    --discovery-token-ca-cert-hash sha256:2544cc7e4be705bd67f3d0521c1125ab4995bc7304b80366c0619177d585eaeb
+kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
+    --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 
 
 # 主节点查看
 kubectl get nodes
@@ -535,21 +539,36 @@ kubectl create -f calico.yaml
 ```
 查看pod,calico-node和calico-kube-controllers都启动起来了，coredns 也变为Running
 ```sh
-root@master200:~# kubectl get pod -A
-NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
-kube-system   calico-kube-controllers-7b5bcff94c-bjvq7   1/1     Running   0          13m
-kube-system   calico-node-mq8xw                          1/1     Running   0          13m
-kube-system   calico-node-pjndz                          1/1     Running   0          13m
-kube-system   calico-node-x8rb7                          1/1     Running   0          13m
-kube-system   coredns-7ff77c879f-8nndv                   1/1     Running   0          16s
-kube-system   coredns-7ff77c879f-m8ncm                   1/1     Running   0          16s
-kube-system   etcd-master200                             1/1     Running   0          2d18h
-kube-system   kube-apiserver-master200                   1/1     Running   0          2d18h
-kube-system   kube-controller-manager-master200          1/1     Running   0          2d18h
-kube-system   kube-proxy-6795x                           1/1     Running   0          2d17h
-kube-system   kube-proxy-8t874                           1/1     Running   0          2d18h
-kube-system   kube-proxy-gzv8z                           1/1     Running   0          2d17h
-kube-system   kube-scheduler-master200   
+root@master200:~# kubectl get pod -A -o wide
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE    IP             NODE        NOMINATED NODE   READINESS GATES
+kube-system   calico-kube-controllers-7b5bcff94c-4rw96   1/1     Running   0          97m    10.100.2.65    node204     <none>           <none>
+kube-system   calico-node-2blwl                          1/1     Running   0          97m    10.100.2.204   node204     <none>           <none>
+kube-system   calico-node-9flzd                          1/1     Running   0          97m    10.100.2.205   node205     <none>           <none>
+kube-system   calico-node-g8l87                          1/1     Running   0          97m    10.100.2.200   master200   <none>           <none>
+kube-system   calico-node-h8tzn                          1/1     Running   0          97m    10.100.2.203   node203     <none>           <none>
+kube-system   calico-node-rnb9n                          1/1     Running   0          97m    10.100.2.201   master201   <none>           <none>
+kube-system   calico-node-vjztp                          1/1     Running   0          97m    10.100.2.202   master202   <none>           <none>
+kube-system   coredns-7ff77c879f-dbzq8                   1/1     Running   0          102m   10.100.2.66    node204     <none>           <none>
+kube-system   coredns-7ff77c879f-xr9ss                   1/1     Running   0          102m   10.100.2.64    node204     <none>           <none>
+kube-system   etcd-master200                             1/1     Running   0          100m   10.100.2.200   master200   <none>           <none>
+kube-system   etcd-master201                             1/1     Running   0          102m   10.100.2.201   master201   <none>           <none>
+kube-system   etcd-master202                             1/1     Running   0          103m   10.100.2.202   master202   <none>           <none>
+kube-system   kube-apiserver-master200                   1/1     Running   2          99m    10.100.2.200   master200   <none>           <none>
+kube-system   kube-apiserver-master201                   1/1     Running   0          102m   10.100.2.201   master201   <none>           <none>
+kube-system   kube-apiserver-master202                   1/1     Running   0          103m   10.100.2.202   master202   <none>           <none>
+kube-system   kube-controller-manager-master200          1/1     Running   1          100m   10.100.2.200   master200   <none>           <none>
+kube-system   kube-controller-manager-master201          1/1     Running   0          102m   10.100.2.201   master201   <none>           <none>
+kube-system   kube-controller-manager-master202          1/1     Running   1          103m   10.100.2.202   master202   <none>           <none>
+kube-system   kube-proxy-2w56c                           1/1     Running   0          101m   10.100.2.200   master200   <none>           <none>
+kube-system   kube-proxy-6wsd9                           1/1     Running   0          100m   10.100.2.204   node204     <none>           <none>
+kube-system   kube-proxy-qh7h6                           1/1     Running   0          102m   10.100.2.201   master201   <none>           <none>
+kube-system   kube-proxy-r2scl                           1/1     Running   0          102m   10.100.2.202   master202   <none>           <none>
+kube-system   kube-proxy-tznkp                           1/1     Running   0          100m   10.100.2.203   node203     <none>           <none>
+kube-system   kube-proxy-vhpqb                           1/1     Running   0          100m   10.100.2.205   node205     <none>           <none>
+kube-system   kube-scheduler-master200                   1/1     Running   0          99m    10.100.2.200   master200   <none>           <none>
+kube-system   kube-scheduler-master201                   1/1     Running   0          102m   10.100.2.201   master201   <none>           <none>
+kube-system   kube-scheduler-master202                   1/1     Running   2          103m   10.100.2.202   master202   <none>           <none>
+
 ```
 ## 查看node
 ```sh
@@ -571,13 +590,6 @@ default via 10.100.0.1 dev ens3 proto static
 ```
 
 
-## 增加一个master节点 
-
-```sh
-  kubeadm join 10.100.2.207:6443 --token xvf7to.6fl0gjdxmoadu62f \
-    --discovery-token-ca-cert-hash sha256:2f86ed4492c0bc301186507f464a236ff80f9214e90ba132315fa7169e854197 \
-    --control-plane --certificate-key b0f336b64d7a7e05093e797bb014156597b298d8770a1af83c8538fafa2145f5
-```
 
 # 其他
 
