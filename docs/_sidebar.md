@@ -7,6 +7,7 @@
 - **go**
 - **k8s**
     - [ubuntu搭建高可用k8s集群多master](./node/k8s/k8s%E6%90%AD%E5%BB%BA.md "欢迎入坑k8s")
+    - [k8s搭建DashBoard](./node/k8s/k8s-DashBoard.md)
 - **mysql**
     - [docker安装mysql](./node/docker/docker%E5%AE%89%E8%A3%85mysql.md)
 - **rust**
