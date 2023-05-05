@@ -1,3 +1,5 @@
+- **每日小记** 
+    - [2023](./node/diary/2023.md)
 - **碎碎念**
     - [对物质的思考](./node/BrokenThoughts/%E5%AF%B9%E4%BA%8E%E7%89%A9%E8%B4%A8%E7%9A%84%E6%80%9D%E8%80%83.md)
 - **卡片笔记**
@@ -5,6 +7,7 @@
 - **gin**
     - [gin框架中查看pprof](./node/gin/gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E6%9F%A5%E7%9C%8Bpprof.md)
 - **go**
+    - [go碎碎念2023-5-5](./node/go/go%E7%A2%8E%E7%A2%8E%E5%BF%B52023-5-5.md)
 - **k8s**
     - [ubuntu搭建高可用k8s集群多master](./node/k8s/k8s%E6%90%AD%E5%BB%BA.md "欢迎入坑k8s")
     - [k8s搭建DashBoard](./node/k8s/k8s-DashBoard.md)
