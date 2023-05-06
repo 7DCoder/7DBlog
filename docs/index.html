@@ -74,7 +74,8 @@
       admin: ['7DCoder'],
       distractionFreeMode: false,
       // id: decodeURI(window.location.pathname),
-      id: location.href.split('#')[1],
+      id: decodeURI(location.href.split('#')[1]),
+      // id: location.href.split('#')[1],
     })
   </script>
 
