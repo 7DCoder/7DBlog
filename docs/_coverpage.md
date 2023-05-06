@@ -7,5 +7,5 @@
 <!-- - rust学习ing -->
 
 [GitHub](https://github.com/7DGithubWeb)
-[Get Started](./README.md)
+[开始阅读](./README.md)
 
