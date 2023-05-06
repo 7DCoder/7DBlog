@@ -1,20 +1,20 @@
 - **每日小记** 
     - [2023](./node/diary/2023.md)
 - **碎碎念**
-    - [对物质的思考](./node/BrokenThoughts/%E5%AF%B9%E4%BA%8E%E7%89%A9%E8%B4%A8%E7%9A%84%E6%80%9D%E8%80%83.md)
+    - [对物质的思考](./node/BrokenThoughts/2023-5-6-1312.md)
 - **卡片笔记**
-    - [我的卡片笔记实践](./node/cardNode/%E6%88%91%E7%9A%84%E5%8D%A1%E7%89%87%E7%AC%94%E8%AE%B0%E5%AE%9E%E8%B7%B5.md)
+    - [我的卡片笔记实践](./node/cardNode/2023-5-6-1312.md)
 - **gin**
-    - [gin框架中查看pprof](./node/gin/gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E6%9F%A5%E7%9C%8Bpprof.md)
+    - [gin框架中查看pprof](./node/gin/2023-5-6-1311.md.md)
 - **go**
-    - [go碎碎念2023-5-5](./node/go/go%E7%A2%8E%E7%A2%8E%E5%BF%B52023-5-5.md)
+    - [go碎碎念2023-5-5](./node/go/2023-5-6-1309.md)
 - **k8s**
-    - [ubuntu搭建高可用k8s集群多master](./node/k8s/k8s%E6%90%AD%E5%BB%BA.md "欢迎入坑k8s")
-    - [k8s搭建DashBoard](./node/k8s/k8s-DashBoard.md)
+    - [ubuntu搭建高可用k8s集群多master](./node/k8s/2023-5-6-1308.md "欢迎入坑k8s")
+    - [k8s搭建DashBoard](./node/k8s/2023-5-6-1307.md)
 - **mysql**
-    - [docker安装mysql](./node/docker/docker%E5%AE%89%E8%A3%85mysql.md)
+    - [docker安装mysql](./node/docker/2023-5-6-1306.md)
 - **rust**
 - **vscode**
-    - [配置vscode获取命令行参数](./node/vscode/%E9%85%8D%E7%BD%AEvscode%E8%8E%B7%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.md) 
-    - [vscodDebug配置获取终端中输入内容](./node/vscode/vscodDebug%E9%85%8D%E7%BD%AE%E8%8E%B7%E5%8F%96%E7%BB%88%E7%AB%AF%E4%B8%AD%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9.md)
-    - [vscode-远程开发配置](./node/vscode/vscode-%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E9%85%8D%E7%BD%AE.md)
+    - [配置vscode获取命令行参数](./node/vscode/2023-5-6-1147.md) 
+    - [vscodDebug配置获取终端中输入内容](./node/vscode/2023-5-6-1148.md)
+    - [vscode-远程开发配置](./node/vscode/2023-5-6-1146.md)
