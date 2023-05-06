@@ -9,8 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" href="./node/attachment/table.ico" type="image/x-icon">
-  <!-- gitalk评论 -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
 </head>
 
 <body>
@@ -61,23 +59,5 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-json.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-yaml.min.js"></script>
-
-  <!-- gitalk评论系统 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
-  <script>
-    const gitalk = new Gitalk({
-      clientID: '4c192f2094a7a6ff5d6d',
-      clientSecret: '5ec9a8691d7860480dc3d0231ed3ab2bb891c011',
-      repo: '7DBlog',
-      owner: '7DCoder',
-      admin: ['7DCoder'],
-      distractionFreeMode: false,
-      // id: decodeURI(window.location.pathname),
-      // id: decodeURI(window.location.href.split('#')[1]),
-      // id: location.href.split('#')[1],
-      id: window.location.href.split("#")[1],
-    })
-  </script>
 
 </html>
