@@ -73,7 +73,8 @@
       owner: '7DCoder',
       admin: ['7DCoder'],
       distractionFreeMode: false,
-      id: decodeURI(window.location.pathname),
+      // id: decodeURI(window.location.pathname),
+      id: location.href.split('#')[1],
     })
   </script>
 
