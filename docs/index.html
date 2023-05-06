@@ -9,6 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="icon" href="./node/attachment/table.ico" type="image/x-icon">
+  <!-- gitalk评论 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
 </head>
 
 <body>
@@ -17,7 +19,7 @@
     window.$docsify = {
       name: '7DBlog',                             // 侧边栏博客标题
       logo: '/node/attachment/icon.jpg',          // 开启后，name替换为图片
-      repo: 'https://github.com/7DGithubWeb',// github项目的地址
+      repo: 'https://github.com/7DCoder/7DBlog',  // github项目的地址，页面右上角进入github
       loadSidebar: true,                          // 开启侧边栏，加载`_sidebar.md`文件
       subMaxLevel: 2,                             // 开启侧边栏同时显示目录功能,如果md文件的第一个标题是一级标题，那么默认已经忽略了。
       loadNavbar: true,                           // 导航栏，加载`_navbar.md`文件
@@ -61,8 +63,6 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0 /components/prism-yaml.min.js"></script>
 
   <!-- gitalk评论系统 -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
-
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
   <script>
@@ -70,8 +70,8 @@
       clientID: '4c192f2094a7a6ff5d6d',
       clientSecret: '5ec9a8691d7860480dc3d0231ed3ab2bb891c011',
       repo: '7DBlog',
-      owner: '7DGithubWeb',
-      admin: [],
+      owner: '7DCoder',
+      admin: ['7DCoder'],
       distractionFreeMode: false,
       id: decodeURI(window.location.pathname),
     })
