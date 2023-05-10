@@ -1,5 +1,5 @@
 - **每日小记** 
-    - [2023](./node/diary/2023.md)
+    - [2023](diary.md)
 - **碎碎念**
     - [对物质的思考](./node/BrokenThoughts/2023-5-6-1312.md)
 - **卡片笔记**
@@ -19,6 +19,7 @@
     - [vscodDebug配置获取终端中输入内容](./node/vscode/2023-5-6-1148.md)
     - [vscode-远程开发配置](./node/vscode/2023-5-6-1146.md)
 - **微服务**
+    * [参考链接](./node/microservice/2023-5-10-1501.md)
     * [什么是RPC](./node/microservice/2023-5-10-1504.md)
     * [RPC的4种调用模式](./node/microservice/2023-5-10-1509.md)
     * [微服务核心组件](./node/microservice/2023-5-10-1515.md)
