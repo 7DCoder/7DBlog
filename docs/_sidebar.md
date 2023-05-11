@@ -23,3 +23,4 @@
     * [什么是RPC](./node/microservice/2023-5-10-1504.md)
     * [RPC的4种调用模式](./node/microservice/2023-5-10-1509.md)
     * [微服务核心组件](./node/microservice/2023-5-10-1515.md)
+    * [gRPC安装](./node/microservice/2023-5-11-1348.md)
