@@ -15,6 +15,11 @@
 - **mysql**
     - [docker安装mysql](./node/docker/2023-5-6-1306.md)
 - **rust**
+    - [cargo初始化项目](./node/rust/2023-6-7-1049.md)
+    - [Rust语句和表达式的区别](./node/rust/2023-6-7-1051.md)
+    - [Rust所有权规则](./node/rust/2023-6-7-1038.md)
+    - [Rust知识点](./node/rust/2023-6-7-1042.md)
+    - [Rust关于引用](./node/rust/2023-6-7-1045.md)
 - **vscode**
     - [配置vscode获取命令行参数](./node/vscode/2023-5-6-1147.md) 
     - [vscodDebug配置获取终端中输入内容](./node/vscode/2023-5-6-1148.md)
