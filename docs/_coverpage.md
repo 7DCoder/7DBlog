@@ -6,6 +6,6 @@
 <!-- - k8s学习ing -->
 <!-- - rust学习ing -->
 
-[GitHub](https://github.com/7DGithubWeb)
+[GitHub](https://github.com/7DCoder/7DBlog)
 [开始阅读](./README.md)
 
