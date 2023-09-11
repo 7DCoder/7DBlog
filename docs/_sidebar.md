@@ -10,6 +10,7 @@
 - **go**
     - [go碎碎念2023-5-5](./node/diary/2023-5-6-1309.md)
     - [go面试题-new和make知识点](./node/diary/2023-8-30-1033.md)
+    - [go面试题-2023年9月11日](./node/diary/2023-9-11-1443.md)
 - **k8s**
     - [ubuntu搭建高可用k8s集群多master](./node/diary/2023-5-6-1308.md "欢迎入坑k8s")
     - [k8s搭建DashBoard](./node/diary/2023-5-6-1307.md)
