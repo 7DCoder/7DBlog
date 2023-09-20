@@ -32,6 +32,7 @@
     - [Rust知识点](./node/diary/2023-6-7-1042.md)
     - [Rust关于引用](./node/diary/2023-6-7-1045.md)
     - [Rust闭包-闭包从所在环境捕获值的方式](./node/diary/2023-6-13-1542.md)
+    - [rust基础知识](./node/diary/2023-9-20-1523.md)
 
 - **vscode**
     - [配置vscode获取命令行参数](./node/diary/2023-5-6-1147.md) 
